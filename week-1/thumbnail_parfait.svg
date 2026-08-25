@@ -1,0 +1,114 @@
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eaf6ef"/>
+      <stop offset="55%" stop-color="#dcefe4"/>
+      <stop offset="100%" stop-color="#c9e6d6"/>
+    </linearGradient>
+    <linearGradient id="table3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c98a4b"/>
+      <stop offset="100%" stop-color="#a8672f"/>
+    </linearGradient>
+    <radialGradient id="sunGlow3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff7e0" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#fff7e0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="yogurt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#fdf6ee"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.25"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#sky3)"/>
+  <circle cx="640" cy="90" r="150" fill="url(#sunGlow3)"/>
+
+  <g opacity="0.55">
+    <ellipse cx="130" cy="80" rx="70" ry="20" fill="#ffffff"/>
+    <ellipse cx="180" cy="70" rx="46" ry="16" fill="#ffffff"/>
+    <ellipse cx="590" cy="55" rx="55" ry="15" fill="#ffffff"/>
+  </g>
+
+  <!-- little honey jar, whimsical touch -->
+  <g transform="translate(120,300)">
+    <ellipse cx="0" cy="95" rx="28" ry="7" fill="#c98a4b" opacity="0.35"/>
+    <rect x="-20" y="24" width="40" height="60" rx="8" fill="#f6d68a"/>
+    <rect x="-22" y="12" width="44" height="16" rx="6" fill="#e8b94a"/>
+    <rect x="-9" y="-2" width="18" height="16" fill="#c98a4b"/>
+  </g>
+
+  <!-- wooden table -->
+  <rect x="0" y="360" width="800" height="140" fill="url(#table3)"/>
+  <g stroke="#8f5a28" stroke-width="2" opacity="0.4">
+    <line x1="0" y1="385" x2="800" y2="385"/>
+    <line x1="0" y1="420" x2="800" y2="420"/>
+    <line x1="0" y1="455" x2="800" y2="455"/>
+  </g>
+
+  <!-- table shadow under glass -->
+  <ellipse cx="400" cy="430" rx="120" ry="20" fill="#5a3616" opacity="0.3"/>
+
+  <!-- parfait glass -->
+  <g transform="translate(400,300)">
+    <!-- glass outline -->
+    <path d="M -70 -140 L -50 130 C -50 148, 50 148, 50 130 L 70 -140 Z" fill="#fbfdfb" opacity="0.35"/>
+
+    <!-- layers, bottom to top -->
+    <path d="M -63 90 L -53 128 C -53 140, 53 140, 53 128 L 63 90 Z" fill="#e8536b"/>
+    <path d="M -66 40 L -63 90 L 63 90 L 66 40 Z" fill="url(#yogurt)"/>
+    <path d="M -68 5 L -66 40 L 66 40 L 68 5 Z" fill="#d8a15c"/>
+    <path d="M -69 -35 L -68 5 L 68 5 L 69 -35 Z" fill="url(#yogurt)"/>
+    <path d="M -70 -70 L -69 -35 L 69 -35 L 70 -70 Z" fill="#e8536b"/>
+
+    <!-- granola dots -->
+    <g fill="#a8672f">
+      <circle cx="-30" cy="18" r="4"/>
+      <circle cx="10" cy="22" r="3.5"/>
+      <circle cx="35" cy="14" r="4"/>
+      <circle cx="-8" cy="10" r="3"/>
+    </g>
+
+    <!-- glass front sheen -->
+    <path d="M -70 -140 L -50 130 C -50 148, 50 148, 50 130 L 70 -140 Z" fill="url(#glass)"/>
+
+    <!-- whipped cream + berries on top -->
+    <ellipse cx="0" cy="-145" rx="55" ry="16" fill="#fffdf8"/>
+    <path d="M -25 -155 C -16 -170, 16 -170, 25 -155 C 28 -146, 8 -144, 0 -152 C -8 -144, -28 -146, -25 -155 Z" fill="#fffdf8"/>
+    <circle cx="-16" cy="-172" r="9" fill="#e8536b"/>
+    <path d="M -16 -181 C -12 -188, -6 -188, -4 -194" stroke="#6faa5e" stroke-width="2" fill="none"/>
+    <circle cx="14" cy="-176" r="7" fill="#e8536b"/>
+    <path d="M 14 -183 C 17 -189, 22 -189, 24 -194" stroke="#6faa5e" stroke-width="2" fill="none"/>
+
+    <!-- mint leaf garnish -->
+    <path d="M 34 -162 C 48 -172, 52 -186, 42 -198 C 28 -188, 24 -172, 34 -162 Z" fill="#6faa5e"/>
+  </g>
+
+  <!-- long spoon leaning on glass -->
+  <g transform="translate(452,180) rotate(18)">
+    <rect x="-4" y="0" width="8" height="150" rx="4" fill="#c98a4b"/>
+    <ellipse cx="0" cy="-8" rx="14" ry="20" fill="#c98a4b"/>
+    <ellipse cx="0" cy="-8" rx="9" ry="14" fill="#e0a765"/>
+  </g>
+
+  <!-- strawberry slice beside glass -->
+  <g transform="translate(280,368)">
+    <path d="M -22 0 C -22 -26, 22 -26, 22 0 C 22 14, -22 14, -22 0 Z" fill="#e8536b"/>
+    <path d="M -22 0 C -22 -26, 22 -26, 22 0" fill="none" stroke="#c9394f" stroke-width="2"/>
+    <g stroke="#ffd9df" stroke-width="1.5">
+      <line x1="0" y1="-22" x2="0" y2="-4"/>
+      <line x1="-12" y1="-18" x2="-4" y2="-4"/>
+      <line x1="12" y1="-18" x2="4" y2="-4"/>
+    </g>
+  </g>
+
+  <!-- small granola scatter on table -->
+  <g fill="#a8672f" opacity="0.85">
+    <circle cx="540" cy="392" r="4"/>
+    <circle cx="558" cy="400" r="3.5"/>
+    <circle cx="522" cy="404" r="3"/>
+  </g>
+</svg>
