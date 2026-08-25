@@ -1,0 +1,138 @@
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fdf1d6"/>
+      <stop offset="55%" stop-color="#fbe3b8"/>
+      <stop offset="100%" stop-color="#f3cf8f"/>
+    </linearGradient>
+    <linearGradient id="table" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c98a4b"/>
+      <stop offset="100%" stop-color="#a8672f"/>
+    </linearGradient>
+    <radialGradient id="bowlInner" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dfe7ea"/>
+    </radialGradient>
+    <linearGradient id="bowlOuter" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3f6b7a"/>
+      <stop offset="100%" stop-color="#274b57"/>
+    </linearGradient>
+    <radialGradient id="yolk" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffe27a"/>
+      <stop offset="70%" stop-color="#ffb648"/>
+      <stop offset="100%" stop-color="#f39a1f"/>
+    </radialGradient>
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff7e0" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#fff7e0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="800" height="500" fill="url(#sky)"/>
+
+  <!-- soft sun glow -->
+  <circle cx="650" cy="90" r="160" fill="url(#sunGlow)"/>
+
+  <!-- distant soft clouds, ghibli style -->
+  <g opacity="0.55">
+    <ellipse cx="120" cy="80" rx="70" ry="22" fill="#ffffff"/>
+    <ellipse cx="170" cy="70" rx="50" ry="18" fill="#ffffff"/>
+    <ellipse cx="600" cy="60" rx="60" ry="16" fill="#ffffff"/>
+  </g>
+
+  <!-- little potted herb, whimsical touch -->
+  <g transform="translate(90,300)">
+    <ellipse cx="0" cy="95" rx="34" ry="8" fill="#c98a4b" opacity="0.35"/>
+    <path d="M -22 90 L -16 40 L 16 40 L 22 90 Z" fill="#c9713b"/>
+    <path d="M -16 40 L 16 40 L 12 30 L -12 30 Z" fill="#e08a52"/>
+    <g stroke="#4c7d3f" stroke-width="4" fill="none" stroke-linecap="round">
+      <path d="M0 40 C -4 15, -18 8, -22 -8"/>
+      <path d="M0 40 C 2 10, 14 4, 20 -10"/>
+      <path d="M0 40 C 0 8, 0 -4, 0 -18"/>
+    </g>
+    <g fill="#5b9350">
+      <ellipse cx="-22" cy="-10" rx="9" ry="5" transform="rotate(-30 -22 -10)"/>
+      <ellipse cx="20" cy="-12" rx="9" ry="5" transform="rotate(30 20 -12)"/>
+      <ellipse cx="0" cy="-20" rx="8" ry="5" transform="rotate(0 0 -20)"/>
+    </g>
+  </g>
+
+  <!-- wooden table -->
+  <rect x="0" y="360" width="800" height="140" fill="url(#table)"/>
+  <g stroke="#8f5a28" stroke-width="2" opacity="0.4">
+    <line x1="0" y1="385" x2="800" y2="385"/>
+    <line x1="0" y1="420" x2="800" y2="420"/>
+    <line x1="0" y1="455" x2="800" y2="455"/>
+  </g>
+
+  <!-- bowl shadow -->
+  <ellipse cx="400" cy="420" rx="220" ry="26" fill="#5a3616" opacity="0.35"/>
+
+  <!-- bowl body -->
+  <path d="M 190 330 C 190 400, 610 400, 610 330 L 590 380 C 560 415, 240 415, 210 380 Z" fill="url(#bowlOuter)"/>
+  <ellipse cx="400" cy="330" rx="210" ry="46" fill="url(#bowlInner)"/>
+  <ellipse cx="400" cy="330" rx="210" ry="46" fill="none" stroke="#274b57" stroke-width="4"/>
+
+  <!-- rice base -->
+  <ellipse cx="400" cy="322" rx="185" ry="34" fill="#fffdf5"/>
+  <g fill="#f3ecd8" opacity="0.8">
+    <ellipse cx="330" cy="315" rx="10" ry="5"/>
+    <ellipse cx="470" cy="318" rx="10" ry="5"/>
+    <ellipse cx="400" cy="305" rx="10" ry="5"/>
+    <ellipse cx="360" cy="330" rx="9" ry="4"/>
+    <ellipse cx="440" cy="332" rx="9" ry="4"/>
+  </g>
+
+  <!-- tuna mayo mound -->
+  <path d="M 320 300 C 300 260, 500 260, 480 300 C 470 320, 330 320, 320 300 Z" fill="#f2d9b8"/>
+  <path d="M 320 300 C 300 260, 500 260, 480 300" fill="none" stroke="#e0bd8a" stroke-width="3" opacity="0.6"/>
+  <g fill="#e6a35a" opacity="0.7">
+    <ellipse cx="350" cy="280" rx="8" ry="4"/>
+    <ellipse cx="400" cy="272" rx="8" ry="4"/>
+    <ellipse cx="450" cy="282" rx="8" ry="4"/>
+  </g>
+
+  <!-- diced onion bits -->
+  <g fill="#f6f1e3" stroke="#d8cba0" stroke-width="1">
+    <rect x="335" y="288" width="7" height="7" transform="rotate(15 338 291)"/>
+    <rect x="460" y="285" width="7" height="7" transform="rotate(-10 463 288)"/>
+    <rect x="410" y="268" width="6" height="6" transform="rotate(25 413 271)"/>
+  </g>
+
+  <!-- soft boiled egg half -->
+  <g transform="translate(400,255)">
+    <ellipse cx="0" cy="0" rx="46" ry="34" fill="#fffaf0" stroke="#f0e6cf" stroke-width="2"/>
+    <ellipse cx="0" cy="2" rx="26" ry="22" fill="url(#yolk)"/>
+    <ellipse cx="-8" cy="-6" rx="8" ry="5" fill="#ffe9a3" opacity="0.7"/>
+  </g>
+
+  <!-- sesame + seaweed flakes -->
+  <g fill="#2b2b2b">
+    <circle cx="300" cy="300" r="2.5"/>
+    <circle cx="500" cy="295" r="2.5"/>
+    <circle cx="360" cy="255" r="2.2"/>
+    <circle cx="440" cy="258" r="2.2"/>
+    <circle cx="420" cy="300" r="2.2"/>
+  </g>
+  <g fill="#1f3d2b" opacity="0.85">
+    <rect x="330" y="240" width="10" height="4" transform="rotate(20 335 242)"/>
+    <rect x="460" y="245" width="10" height="4" transform="rotate(-15 465 247)"/>
+    <rect x="380" y="335" width="9" height="4" transform="rotate(10 384 337)"/>
+  </g>
+
+  <!-- chopsticks resting on bowl -->
+  <g transform="rotate(18 560 300)">
+    <rect x="540" y="292" width="200" height="7" rx="3.5" fill="#7a4a24"/>
+    <rect x="540" y="303" width="200" height="7" rx="3.5" fill="#8a5730"/>
+  </g>
+
+  <!-- small side leaf garnish -->
+  <path d="M 230 335 C 210 320, 205 300, 220 285 C 235 300, 240 320, 230 335 Z" fill="#6faa5e"/>
+
+  <!-- gentle steam wisps, whimsical ghibli touch -->
+  <g stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.55">
+    <path d="M 350 240 C 340 210, 360 195, 350 165"/>
+    <path d="M 450 240 C 460 210, 440 195, 450 165"/>
+  </g>
+</svg>
