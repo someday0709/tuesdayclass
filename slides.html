@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>딸기 요거트 파르페 | 발표자료</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<!-- ⚠️ 모든 CDN은 버전을 명시적으로 고정한다. -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
+<style>
+  html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans KR', 'Segoe UI', sans-serif; }
+</style>
+</head>
+<body class="bg-black">
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ========================================
+// 🎨 Design System Components
+// ========================================
+
+function Kicker({ children, className = '' }) {
+  return (
+    <span className={`inline-block text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase ${className}`}>
+      {children}
+    </span>
+  );
+}
+
+function IconButton({ onClick, disabled = false, label, className = '', children }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      className={`w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full text-white/80 hover:text-white hover:bg-white/10 disabled:opacity-25 disabled:hover:bg-transparent transition-colors shrink-0 ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ChevronIcon({ direction = 'right' }) {
+  return (
+    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      {direction === 'right' ? <path d="M9 5l7 7-7 7" /> : <path d="M15 5l-7 7 7 7" />}
+    </svg>
+  );
+}
+
+function FullscreenIcon({ active }) {
+  return active ? (
+    <svg viewBox="0 0 24 24" className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 4v3a2 2 0 0 1-2 2H4M20 9h-3a2 2 0 0 1-2-2V4M15 20v-3a2 2 0 0 1 2-2h3M4 15h3a2 2 0 0 1 2 2v3" />
+    </svg>
+  ) : (
+    <svg viewBox="0 0 24 24" className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 9V6a2 2 0 0 1 2-2h3M20 9V6a2 2 0 0 0-2-2h-3M4 15v3a2 2 0 0 0 2 2h3M20 15v3a2 2 0 0 1-2 2h-3" />
+    </svg>
+  );
+}
+
+// ========================================
+// 🧩 Common/Layout Components
+// ========================================
+
+function ParfaitIllustration({ className = '', theme = 'light' }) {
+  const outline = theme === 'dark' ? '#e8b6ac' : '#a8554f';
+  const sliceOutline = theme === 'dark' ? '#d98f84' : '#8a413c';
+  return (
+    <svg viewBox="0 0 160 210" className={className} role="img" aria-label="유리컵에 담긴 딸기 요거트 파르페 일러스트">
+      <defs>
+        <clipPath id="glassClipPres">
+          <path d="M34,44 L126,44 L109,172 Q108,180 100,180 L60,180 Q52,180 51,172 Z" />
+        </clipPath>
+      </defs>
+
+      <g transform="rotate(24 132 70)">
+        <rect x="128" y="30" width="6" height="80" rx="3" fill="#c9a267" />
+        <ellipse cx="131" cy="24" rx="9" ry="13" fill="#e8d9bb" stroke="#c9a267" strokeWidth="2" />
+      </g>
+
+      <g clipPath="url(#glassClipPres)">
+        <rect x="20" y="48" width="120" height="45" fill="#FBEFEA" />
+        <rect x="20" y="93" width="120" height="21" fill="#EFE1C4" />
+        <rect x="20" y="114" width="120" height="20" fill="#FBEFEA" />
+        <rect x="20" y="134" width="120" height="21" fill="#EFE1C4" />
+        <rect x="20" y="155" width="120" height="25" fill="#FBEFEA" />
+
+        <g fill="#B8925B">
+          <circle cx="46" cy="98" r="1.8" /><circle cx="58" cy="103" r="1.6" /><circle cx="70" cy="97" r="1.7" />
+          <circle cx="82" cy="105" r="1.6" /><circle cx="94" cy="98" r="1.8" /><circle cx="105" cy="104" r="1.6" />
+          <circle cx="113" cy="97" r="1.7" /><circle cx="52" cy="108" r="1.5" /><circle cx="99" cy="109" r="1.5" />
+        </g>
+        <g fill="#B8925B">
+          <circle cx="48" cy="139" r="1.8" /><circle cx="60" cy="144" r="1.6" /><circle cx="72" cy="138" r="1.7" />
+          <circle cx="84" cy="146" r="1.6" /><circle cx="96" cy="139" r="1.8" /><circle cx="107" cy="144" r="1.6" />
+          <circle cx="112" cy="137" r="1.5" /><circle cx="55" cy="148" r="1.5" />
+        </g>
+
+        <g fill="#a8554f">
+          <rect x="47" y="118" width="7" height="6" rx="2" transform="rotate(12 50 121)" />
+          <rect x="63" y="122" width="7" height="6" rx="2" transform="rotate(-10 66 125)" />
+          <rect x="79" y="117" width="7" height="6" rx="2" transform="rotate(8 82 120)" />
+          <rect x="95" y="123" width="7" height="6" rx="2" transform="rotate(-14 98 126)" />
+          <rect x="108" y="117" width="7" height="6" rx="2" transform="rotate(10 111 120)" />
+        </g>
+      </g>
+
+      <path d="M34,44 L126,44 L109,172 Q108,180 100,180 L60,180 Q52,180 51,172 Z"
+        fill="none" stroke={outline} strokeWidth="2.5" strokeLinejoin="round" />
+      <ellipse cx="80" cy="44" rx="46" ry="6" fill="none" stroke={outline} strokeWidth="2.5" />
+
+      <path d="M42,40 Q50,32 58,40 T74,40 T90,40 T106,40 T118,40" fill="none" stroke="#c9a267" strokeWidth="2" strokeLinecap="round" />
+
+      <g transform="translate(58,26)">
+        <path d="M0,-13 C10,-6 9,7 0,14 C-9,7 -10,-6 0,-13 Z" fill="#a8554f" stroke={sliceOutline} strokeWidth="1.2" />
+        <path d="M0,-9 L0,11 M-5,-4 L4,-2 M-5,4 L4,6" stroke="#FBEFEA" strokeWidth="1.4" strokeLinecap="round" />
+      </g>
+      <g transform="translate(96,22) rotate(18)">
+        <path d="M0,-13 C10,-6 9,7 0,14 C-9,7 -10,-6 0,-13 Z" fill="#a8554f" stroke={sliceOutline} strokeWidth="1.2" />
+        <path d="M0,-9 L0,11 M-5,-4 L4,-2 M-5,4 L4,6" stroke="#FBEFEA" strokeWidth="1.4" strokeLinecap="round" />
+      </g>
+
+      <path d="M100,14 Q112,10 116,20 Q104,22 100,14 Z" fill="#7c8f6e" stroke="#5f7052" strokeWidth="1" />
+    </svg>
+  );
+}
+
+function ControlBar({ index, total, onPrev, onNext, onDotClick, isFullscreen, onToggleFullscreen }) {
+  return (
+    <div className="h-14 sm:h-16 shrink-0 bg-black flex items-center gap-2 sm:gap-4 px-3 sm:px-6 border-t border-white/10">
+      <a
+        href="index.html"
+        className="hidden sm:inline-flex items-center text-white/40 hover:text-white text-xs font-bold tracking-wide shrink-0 transition-colors"
+      >
+        ← 레시피 웹사이트
+      </a>
+
+      <IconButton onClick={onPrev} disabled={index === 0} label="이전 슬라이드">
+        <ChevronIcon direction="left" />
+      </IconButton>
+
+      <div className="flex-1 hidden sm:flex items-center justify-center gap-1.5 overflow-hidden">
+        {Array.from({ length: total }).map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => onDotClick(i)}
+            aria-label={`${i + 1}번 슬라이드로 이동`}
+            aria-current={i === index}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === index ? 'w-6 bg-white' : 'w-1.5 bg-white/25 hover:bg-white/50'
+            }`}
+          />
+        ))}
+      </div>
+      <div className="flex-1 sm:hidden" />
+
+      <span className="text-white/50 text-xs font-semibold tabular-nums shrink-0">
+        {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+      </span>
+
+      <IconButton onClick={onToggleFullscreen} label="전체화면 전환" className="hidden sm:flex">
+        <FullscreenIcon active={isFullscreen} />
+      </IconButton>
+
+      <IconButton onClick={onNext} disabled={index === total - 1} label="다음 슬라이드">
+        <ChevronIcon direction="right" />
+      </IconButton>
+    </div>
+  );
+}
+
+// ========================================
+// 📄 Slide Components
+// ========================================
+
+const INGREDIENTS = [
+  { id: 1, name: '그릭 요거트 (또는 플레인 요거트)', amount: '400g' },
+  { id: 2, name: '딸기', amount: '200g' },
+  { id: 3, name: '그래놀라', amount: '100g' },
+  { id: 4, name: '꿀 또는 메이플시럽', amount: '2큰술' },
+  { id: 5, name: '딸기잼 (선택)', amount: '2큰술' },
+  { id: 6, name: '민트잎 (장식용)', amount: '2장' },
+];
+
+const STEPS = [
+  { title: '딸기 손질하기', desc: '딸기는 깨끗이 씻어 꼭지를 제거하고 먹기 좋은 크기로 슬라이스합니다.', time: '5분' },
+  { title: '요거트 달콤하게 만들기', desc: '그릭 요거트에 꿀(또는 메이플시럽)을 넣고 골고루 섞어줍니다.', time: '2분' },
+  { title: '1차 층 쌓기', desc: '유리컵 바닥에 그래놀라를 깔고, 그 위에 달콤한 요거트, 슬라이스한 딸기 순서로 층을 쌓습니다.', time: '3분' },
+  { title: '반복해서 층 쌓기', desc: '같은 순서(그래놀라 → 요거트 → 딸기)로 한 번 더 층을 쌓아 컵을 채웁니다.', time: '3분' },
+  { title: '토핑 & 장식', desc: '맨 위에 남은 딸기와 그래놀라를 올리고 민트잎으로 장식합니다.', time: '2분' },
+  { title: '차갑게 즐기기', desc: '냉장고에 10분 정도 두어 살짝 차게 한 뒤 바로 서빙합니다.', time: '10분 (냉장)' },
+];
+
+const TIPS = [
+  '그래놀라는 눅눅해지지 않도록 먹기 직전에 넣는 것이 좋아요.',
+  '그릭 요거트를 사용하면 더 꾸덕하고 진한 맛을 즐길 수 있어요.',
+  '딸기 대신 블루베리, 키위 등 좋아하는 제철 과일로 대체할 수 있어요.',
+  '미리 준비해두려면 그래놀라는 따로 보관했다가 먹기 직전에 올려주세요.',
+];
+
+const STATS = [
+  { value: '15', unit: '분', label: '준비 시간' },
+  { value: '2', unit: '인분', label: '기본 분량' },
+  { value: '6', unit: '단계', label: '전체 과정' },
+  { value: 'No', unit: '-Cook', label: '조리 없음' },
+];
+
+function CoverSlide() {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-black text-white text-center px-6 sm:px-10 relative">
+      <ParfaitIllustration theme="dark" className="w-32 sm:w-48 mb-6 sm:mb-8" />
+      <Kicker className="text-white/40">RECIPE PRESENTATION</Kicker>
+      <h1 className="mt-5 sm:mt-6 font-black text-5xl sm:text-7xl md:text-8xl tracking-tight leading-none">
+        딸기 요거트 파르페
+      </h1>
+      <p className="mt-6 text-white/55 text-base sm:text-xl md:text-2xl font-medium max-w-xl">
+        레이어드 되어 있는, 상큼한 여름 한 잔.
+      </p>
+      <span className="absolute bottom-8 sm:bottom-10 text-white/25 text-xs font-semibold tracking-wide">
+        → 방향키 또는 스와이프로 이동
+      </span>
+    </div>
+  );
+}
+
+function StatementSlide() {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-white text-stone-900 text-center px-6 sm:px-10">
+      <Kicker className="text-stone-400">CONCEPT</Kicker>
+      <h2 className="mt-6 font-black text-4xl sm:text-6xl md:text-7xl leading-tight tracking-tight">
+        재료는 여섯 가지.<br />비법은 <span className="text-[#a8554f]">층</span>입니다.
+      </h2>
+    </div>
+  );
+}
+
+function StatsSlide() {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-black text-white px-6 sm:px-10">
+      <Kicker className="text-white/40 mb-10 sm:mb-14">AT A GLANCE</Kicker>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 sm:gap-x-14">
+        {STATS.map((s) => (
+          <div key={s.label} className="text-center">
+            <div className="font-black text-5xl sm:text-7xl tracking-tight">
+              {s.value}
+              <span className="text-lg sm:text-2xl align-top ml-1 text-white/40">{s.unit}</span>
+            </div>
+            <div className="mt-3 text-white/45 text-xs sm:text-sm font-bold uppercase tracking-widest">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function IngredientsSlide() {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-white text-stone-900 px-6 sm:px-10">
+      <Kicker className="text-stone-400">INGREDIENTS</Kicker>
+      <h2 className="mt-4 font-black text-3xl sm:text-5xl tracking-tight">필요한 재료</h2>
+      <p className="mt-2 text-stone-400 text-sm sm:text-base font-semibold">2인분 기준</p>
+      <div className="mt-10 sm:mt-12 w-full max-w-3xl grid sm:grid-cols-2 gap-x-10 sm:gap-x-14 gap-y-4 sm:gap-y-5">
+        {INGREDIENTS.map((ing) => (
+          <div key={ing.id} className="flex items-baseline justify-between gap-4 border-b-2 border-stone-100 pb-3">
+            <span className="text-sm sm:text-base font-semibold text-stone-700">{ing.name}</span>
+            <span className="text-sm sm:text-base font-black text-[#a8554f] tabular-nums shrink-0">{ing.amount}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function StepSlide({ step, index, total }) {
+  return (
+    <div className="relative w-full h-full flex items-center justify-center bg-white overflow-hidden px-6 sm:px-10">
+      <span
+        className="absolute font-black text-stone-100 select-none leading-none pointer-events-none"
+        style={{ fontSize: 'min(55vh, 45vw)' }}
+        aria-hidden="true"
+      >
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <div className="relative z-10 max-w-xl text-center">
+        <Kicker className="text-[#a8554f]">STEP {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</Kicker>
+        <h2 className="mt-5 font-black text-3xl sm:text-5xl tracking-tight text-stone-900">{step.title}</h2>
+        <p className="mt-5 text-base sm:text-lg text-stone-500 font-medium leading-relaxed">{step.desc}</p>
+        <span className="mt-7 inline-block text-xs sm:text-sm font-bold text-stone-500 border-2 border-stone-200 rounded-full px-4 py-1.5">
+          ⏱ {step.time}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function TipsSlide() {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-stone-50 text-stone-900 px-6 sm:px-10">
+      <Kicker className="text-stone-400">TIPS</Kicker>
+      <h2 className="mt-4 font-black text-3xl sm:text-5xl tracking-tight">알아두면 좋은 팁</h2>
+      <div className="mt-10 sm:mt-12 w-full max-w-2xl divide-y-2 divide-stone-200">
+        {TIPS.map((tip, i) => (
+          <div key={i} className="flex items-start gap-5 py-4 sm:py-5">
+            <span className="font-black text-lg sm:text-xl text-stone-300 tabular-nums shrink-0 w-7">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span className="text-sm sm:text-base font-semibold text-stone-600 leading-relaxed text-left">{tip}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ClosingSlide() {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-black text-white text-center px-6 sm:px-10 relative">
+      <ParfaitIllustration theme="dark" className="w-28 sm:w-36 mb-8" />
+      <h2 className="font-black text-4xl sm:text-6xl md:text-7xl tracking-tight">맛있게 드세요.</h2>
+      <p className="mt-5 text-white/55 text-base sm:text-xl font-medium">오늘의 파르페, 지금 만들어보세요.</p>
+      <span className="absolute bottom-8 sm:bottom-10 text-white/25 text-xs font-semibold tracking-wide">
+        Recipe Journal — Presentation Edition
+      </span>
+    </div>
+  );
+}
+
+// ========================================
+// 🚀 App Component
+// ========================================
+
+function App() {
+  const slides = React.useMemo(() => ([
+    <CoverSlide key="cover" />,
+    <StatementSlide key="statement" />,
+    <StatsSlide key="stats" />,
+    <IngredientsSlide key="ingredients" />,
+    ...STEPS.map((step, i) => <StepSlide key={`step-${i}`} step={step} index={i} total={STEPS.length} />),
+    <TipsSlide key="tips" />,
+    <ClosingSlide key="closing" />,
+  ]), []);
+  const total = slides.length;
+
+  const [index, setIndex] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const touchStartX = useRef(null);
+
+  const goNext = useCallback(() => setIndex((i) => Math.min(i + 1, total - 1)), [total]);
+  const goPrev = useCallback(() => setIndex((i) => Math.max(i - 1, 0)), []);
+  const goTo = useCallback((n) => setIndex(Math.min(Math.max(n, 0), total - 1)), [total]);
+
+  // 해시 기반 슬라이드 위치 동기화 (새로고침/딥링크 시 위치 유지)
+  useEffect(() => {
+    const applyFromHash = () => {
+      const raw = parseInt(window.location.hash.replace('#', ''), 10);
+      if (!Number.isNaN(raw) && raw >= 1 && raw <= total) setIndex(raw - 1);
+    };
+    applyFromHash();
+    window.addEventListener('hashchange', applyFromHash);
+    return () => window.removeEventListener('hashchange', applyFromHash);
+  }, [total]);
+
+  useEffect(() => {
+    const newHash = `#${index + 1}`;
+    if (window.location.hash !== newHash) {
+      window.history.replaceState(null, '', newHash);
+    }
+  }, [index]);
+
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleKeydown = (e) => {
+      if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key)) {
+        e.preventDefault();
+        goNext();
+      } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
+        e.preventDefault();
+        goPrev();
+      } else if (e.key === 'Home') {
+        goTo(0);
+      } else if (e.key === 'End') {
+        goTo(total - 1);
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    };
+    window.addEventListener('keydown', handleKeydown);
+    return () => window.removeEventListener('keydown', handleKeydown);
+  }, [goNext, goPrev, goTo, toggleFullscreen, total]);
+
+  useEffect(() => {
+    const handleFsChange = () => setIsFullscreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
+
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (delta < -50) goNext();
+    else if (delta > 50) goPrev();
+    touchStartX.current = null;
+  };
+
+  return (
+    <div className="fixed inset-0 flex flex-col bg-black">
+      <div
+        className="relative flex-1 overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div
+          className="flex h-full transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] will-change-transform"
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {slides.map((slide, i) => (
+            <div key={i} className="w-full h-full shrink-0">{slide}</div>
+          ))}
+        </div>
+      </div>
+      <ControlBar
+        index={index}
+        total={total}
+        onPrev={goPrev}
+        onNext={goNext}
+        onDotClick={goTo}
+        isFullscreen={isFullscreen}
+        onToggleFullscreen={toggleFullscreen}
+      />
+    </div>
+  );
+}
+
+// ========================================
+// Rendering
+// ========================================
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

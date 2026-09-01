@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>딸기 요거트 파르페 레시피</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<!-- ⚠️ 모든 CDN은 버전을 명시적으로 고정한다. -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.25.9/babel.min.js"></script>
+<style>
+  body { font-family: 'Noto Sans KR', system-ui, sans-serif; font-weight: 500; }
+  .font-serif-kr { font-family: 'Noto Serif KR', serif; }
+  @media print {
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body class="bg-[#FAF7F2]">
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useMemo, useCallback } = React;
+
+// ========================================
+// 🎨 Design System Components
+// ========================================
+
+function Button({ variant = 'primary', size = 'md', disabled = false, onClick, className = '', children, ...props }) {
+  const base = 'inline-flex items-center justify-center font-semibold tracking-wide transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed';
+  const variants = {
+    primary: 'bg-[#a8554f] text-white hover:bg-[#8a413c] focus:ring-[#a8554f]',
+    secondary: 'bg-transparent text-[#a8554f] border-2 border-[#a8554f]/40 hover:border-[#a8554f] focus:ring-[#a8554f]',
+    ghost: 'bg-transparent text-stone-600 hover:text-[#a8554f] focus:ring-transparent',
+  };
+  const sizes = {
+    sm: 'text-xs px-3 py-1.5 gap-1 rounded-sm',
+    md: 'text-sm px-4 py-2 gap-1.5 rounded-sm',
+    lg: 'text-base px-6 py-2.5 gap-2 rounded-sm',
+  };
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
+
+function Tag({ children, className = '' }) {
+  return (
+    <span className={`inline-flex items-center text-[11px] font-bold tracking-[0.08em] uppercase text-stone-600 ${className}`}>
+      {children}
+    </span>
+  );
+}
+
+function Card({ children, className = '' }) {
+  return (
+    <div className={`bg-white border-2 border-stone-200 ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+function ProgressBar({ value, max, className = '' }) {
+  const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
+  return (
+    <div className={className}>
+      <div className="flex items-center justify-between mb-2">
+        <Tag>조리 진행률</Tag>
+        <span className="text-xs font-bold text-stone-500 tabular-nums">{value} / {max}</span>
+      </div>
+      <div className="w-full h-1 bg-stone-200 overflow-hidden" role="progressbar" aria-valuenow={pct} aria-valuemin="0" aria-valuemax="100">
+        <div
+          className="h-1 bg-[#a8554f] transition-all duration-300"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ========================================
+// 🧩 Common/Layout Components
+// ========================================
+
+function ParfaitIllustration({ className = '' }) {
+  return (
+    <svg viewBox="0 0 160 210" className={className} role="img" aria-label="유리컵에 담긴 딸기 요거트 파르페 일러스트">
+      <defs>
+        <clipPath id="glassClip">
+          <path d="M34,44 L126,44 L109,172 Q108,180 100,180 L60,180 Q52,180 51,172 Z" />
+        </clipPath>
+      </defs>
+
+      {/* spoon */}
+      <g transform="rotate(24 132 70)">
+        <rect x="128" y="30" width="6" height="80" rx="3" fill="#c9a267" />
+        <ellipse cx="131" cy="24" rx="9" ry="13" fill="#e8d9bb" stroke="#c9a267" strokeWidth="2" />
+      </g>
+
+      {/* layers inside glass */}
+      <g clipPath="url(#glassClip)">
+        <rect x="20" y="48" width="120" height="45" fill="#FBEFEA" />
+        <rect x="20" y="93" width="120" height="21" fill="#EFE1C4" />
+        <rect x="20" y="114" width="120" height="20" fill="#FBEFEA" />
+        <rect x="20" y="134" width="120" height="21" fill="#EFE1C4" />
+        <rect x="20" y="155" width="120" height="25" fill="#FBEFEA" />
+
+        {/* granola dots - upper band */}
+        <g fill="#B8925B">
+          <circle cx="46" cy="98" r="1.8" /><circle cx="58" cy="103" r="1.6" /><circle cx="70" cy="97" r="1.7" />
+          <circle cx="82" cy="105" r="1.6" /><circle cx="94" cy="98" r="1.8" /><circle cx="105" cy="104" r="1.6" />
+          <circle cx="113" cy="97" r="1.7" /><circle cx="52" cy="108" r="1.5" /><circle cx="99" cy="109" r="1.5" />
+        </g>
+        {/* granola dots - lower band */}
+        <g fill="#B8925B">
+          <circle cx="48" cy="139" r="1.8" /><circle cx="60" cy="144" r="1.6" /><circle cx="72" cy="138" r="1.7" />
+          <circle cx="84" cy="146" r="1.6" /><circle cx="96" cy="139" r="1.8" /><circle cx="107" cy="144" r="1.6" />
+          <circle cx="112" cy="137" r="1.5" /><circle cx="55" cy="148" r="1.5" />
+        </g>
+
+        {/* strawberry chunks band */}
+        <g fill="#a8554f">
+          <rect x="47" y="118" width="7" height="6" rx="2" transform="rotate(12 50 121)" />
+          <rect x="63" y="122" width="7" height="6" rx="2" transform="rotate(-10 66 125)" />
+          <rect x="79" y="117" width="7" height="6" rx="2" transform="rotate(8 82 120)" />
+          <rect x="95" y="123" width="7" height="6" rx="2" transform="rotate(-14 98 126)" />
+          <rect x="108" y="117" width="7" height="6" rx="2" transform="rotate(10 111 120)" />
+        </g>
+      </g>
+
+      {/* glass outline */}
+      <path d="M34,44 L126,44 L109,172 Q108,180 100,180 L60,180 Q52,180 51,172 Z"
+        fill="none" stroke="#a8554f" strokeWidth="2.5" strokeLinejoin="round" />
+      <ellipse cx="80" cy="44" rx="46" ry="6" fill="none" stroke="#a8554f" strokeWidth="2.5" />
+
+      {/* honey drizzle on top */}
+      <path d="M42,40 Q50,32 58,40 T74,40 T90,40 T106,40 T118,40" fill="none" stroke="#c9a267" strokeWidth="2" strokeLinecap="round" />
+
+      {/* strawberry slices on top */}
+      <g transform="translate(58,26)">
+        <path d="M0,-13 C10,-6 9,7 0,14 C-9,7 -10,-6 0,-13 Z" fill="#a8554f" stroke="#8a413c" strokeWidth="1.2" />
+        <path d="M0,-9 L0,11 M-5,-4 L4,-2 M-5,4 L4,6" stroke="#FBEFEA" strokeWidth="1.4" strokeLinecap="round" />
+      </g>
+      <g transform="translate(96,22) rotate(18)">
+        <path d="M0,-13 C10,-6 9,7 0,14 C-9,7 -10,-6 0,-13 Z" fill="#a8554f" stroke="#8a413c" strokeWidth="1.2" />
+        <path d="M0,-9 L0,11 M-5,-4 L4,-2 M-5,4 L4,6" stroke="#FBEFEA" strokeWidth="1.4" strokeLinecap="round" />
+      </g>
+
+      {/* mint leaf */}
+      <path d="M100,14 Q112,10 116,20 Q104,22 100,14 Z" fill="#7c8f6e" stroke="#5f7052" strokeWidth="1" />
+    </svg>
+  );
+}
+
+function Header() {
+  return (
+    <header className="bg-[#F4E8E3] border-b-2 border-[#a8554f]/15">
+      <div className="max-w-2xl mx-auto px-6 pt-14 pb-14 sm:pt-16 sm:pb-16 text-center">
+        <ParfaitIllustration className="w-36 sm:w-44 mx-auto drop-shadow-sm" />
+        <Tag className="mt-6 block text-[#a8554f]">Recipe Journal · No. 04</Tag>
+        <h1 className="font-serif-kr mt-4 text-4xl sm:text-5xl font-black text-stone-800 tracking-tight">
+          딸기 요거트 파르페
+        </h1>
+        <div className="mt-5 w-10 h-1 bg-[#a8554f]/50 mx-auto" />
+        <p className="mt-5 text-stone-600 font-medium text-sm sm:text-base leading-relaxed max-w-md mx-auto">
+          상큼한 딸기와 고소한 그래놀라, 부드러운 요거트를 층층이 쌓아 만드는
+          손이 많이 가지 않는 계절 디저트.
+        </p>
+        <a
+          href="slides.html"
+          className="no-print mt-7 inline-flex items-center gap-2 text-xs font-bold tracking-wide text-[#a8554f] border-2 border-[#a8554f]/40 hover:border-[#a8554f] px-4 py-2 rounded-sm transition-colors"
+        >
+          발표용 슬라이드로 보기 →
+        </a>
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="no-print mt-16 py-10 text-center border-t-2 border-stone-200">
+      <p className="text-xs font-semibold tracking-wide text-stone-500">Recipe Journal — 오늘의 기록을 맛있게 남겨보세요.</p>
+    </footer>
+  );
+}
+
+// ========================================
+// 📄 Page Components
+// ========================================
+
+const BASE_SERVINGS = 2;
+const MIN_SERVINGS = 1;
+const MAX_SERVINGS = 8;
+
+const INGREDIENTS = [
+  { id: 1, name: '그릭 요거트 (또는 플레인 요거트)', baseAmount: 400, unit: 'g' },
+  { id: 2, name: '딸기', baseAmount: 200, unit: 'g' },
+  { id: 3, name: '그래놀라', baseAmount: 100, unit: 'g' },
+  { id: 4, name: '꿀 또는 메이플시럽', baseAmount: 2, unit: '큰술' },
+  { id: 5, name: '딸기잼 (선택)', baseAmount: 2, unit: '큰술' },
+  { id: 6, name: '민트잎 (장식용)', baseAmount: 2, unit: '장' },
+];
+
+const STEPS = [
+  { id: 1, title: '딸기 손질하기', desc: '딸기는 깨끗이 씻어 꼭지를 제거하고 먹기 좋은 크기로 슬라이스합니다.', time: '5분' },
+  { id: 2, title: '요거트 달콤하게 만들기', desc: '그릭 요거트에 꿀(또는 메이플시럽)을 넣고 골고루 섞어줍니다.', time: '2분' },
+  { id: 3, title: '1차 층 쌓기', desc: '유리컵 바닥에 그래놀라를 깔고, 그 위에 달콤한 요거트, 슬라이스한 딸기 순서로 층을 쌓습니다.', time: '3분' },
+  { id: 4, title: '반복해서 층 쌓기', desc: '같은 순서(그래놀라 → 요거트 → 딸기)로 한 번 더 층을 쌓아 컵을 채웁니다.', time: '3분' },
+  { id: 5, title: '토핑 & 장식', desc: '맨 위에 남은 딸기와 그래놀라를 올리고 민트잎으로 장식합니다.', time: '2분' },
+  { id: 6, title: '차갑게 즐기기', desc: '냉장고에 10분 정도 두어 살짝 차게 한 뒤 바로 서빙합니다.', time: '10분 (냉장)' },
+];
+
+const TIPS = [
+  '그래놀라는 눅눅해지지 않도록 먹기 직전에 넣는 것이 좋아요.',
+  '그릭 요거트를 사용하면 더 꾸덕하고 진한 맛을 즐길 수 있어요.',
+  '딸기 대신 블루베리, 키위 등 좋아하는 제철 과일로 대체할 수 있어요.',
+  '미리 준비해두려면 그래놀라는 따로 보관했다가 먹기 직전에 올려주세요.',
+];
+
+const NUTRITION = [
+  { label: '칼로리', value: '320', unit: 'kcal' },
+  { label: '단백질', value: '15', unit: 'g' },
+  { label: '탄수화물', value: '48', unit: 'g' },
+  { label: '지방', value: '8', unit: 'g' },
+];
+
+function roundAmount(amount, unit) {
+  if (unit === 'g') return Math.round(amount / 5) * 5;
+  if (unit === '큰술') return Math.round(amount * 2) / 2;
+  return Math.round(amount);
+}
+
+function formatAmount(n) {
+  return Number.isInteger(n) ? n : n.toFixed(1);
+}
+
+function ServingsAdjuster({ servings, onChange }) {
+  return (
+    <div className="flex items-center gap-3">
+      <Tag>인분 수</Tag>
+      <div className="flex items-center border-2 border-stone-300">
+        <button
+          type="button"
+          disabled={servings <= MIN_SERVINGS}
+          onClick={() => onChange(Math.max(MIN_SERVINGS, servings - 1))}
+          className="w-8 h-8 flex items-center justify-center font-bold text-stone-600 hover:text-[#a8554f] disabled:opacity-30 disabled:hover:text-stone-600"
+          aria-label="인분 수 줄이기"
+        >
+          −
+        </button>
+        <span className="w-12 text-center text-sm font-bold text-stone-800 tabular-nums border-x-2 border-stone-300 h-8 flex items-center justify-center">
+          {servings}인분
+        </span>
+        <button
+          type="button"
+          disabled={servings >= MAX_SERVINGS}
+          onClick={() => onChange(Math.min(MAX_SERVINGS, servings + 1))}
+          className="w-8 h-8 flex items-center justify-center font-bold text-stone-600 hover:text-[#a8554f] disabled:opacity-30 disabled:hover:text-stone-600"
+          aria-label="인분 수 늘리기"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function IngredientsList({ servings, checkedIds, onToggle }) {
+  const scaledIngredients = useMemo(() => {
+    const ratio = servings / BASE_SERVINGS;
+    return INGREDIENTS.map((ing) => ({
+      ...ing,
+      amount: roundAmount(ing.baseAmount * ratio, ing.unit),
+    }));
+  }, [servings]);
+
+  return (
+    <Card className="p-6 sm:p-8">
+      <h2 className="font-serif-kr text-lg font-bold text-stone-800 mb-5">재료</h2>
+      <ul className="divide-y divide-stone-100">
+        {scaledIngredients.map((ing) => {
+          const checked = checkedIds.has(ing.id);
+          return (
+            <li key={ing.id}>
+              <label className="flex items-center justify-between gap-4 py-3 cursor-pointer">
+                <span className="flex items-center gap-3 min-w-0">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => onToggle(ing.id)}
+                    className="w-4 h-4 accent-[#a8554f] shrink-0"
+                  />
+                  <span className={`text-sm font-medium truncate ${checked ? 'line-through text-stone-300' : 'text-stone-700'}`}>
+                    {ing.name}
+                  </span>
+                </span>
+                <span className={`text-sm font-bold tabular-nums shrink-0 ${checked ? 'text-stone-300' : 'text-stone-800'}`}>
+                  {formatAmount(ing.amount)}{ing.unit}
+                </span>
+              </label>
+            </li>
+          );
+        })}
+      </ul>
+    </Card>
+  );
+}
+
+function StepsList({ checkedIds, onToggle }) {
+  return (
+    <Card className="p-6 sm:p-8">
+      <h2 className="font-serif-kr text-lg font-bold text-stone-800 mb-5">만드는 순서</h2>
+      <ol className="divide-y divide-stone-100">
+        {STEPS.map((step, idx) => {
+          const done = checkedIds.has(step.id);
+          return (
+            <li key={step.id}>
+              <button
+                type="button"
+                onClick={() => onToggle(step.id)}
+                className="w-full text-left flex items-start gap-4 py-4 group"
+                aria-pressed={done}
+              >
+                <span
+                  className={`font-serif-kr shrink-0 mt-0.5 text-sm font-bold w-6 tabular-nums ${
+                    done ? 'text-[#a8554f]' : 'text-stone-400'
+                  }`}
+                >
+                  {done ? '✓' : String(idx + 1).padStart(2, '0')}
+                </span>
+                <span className="flex-1 min-w-0">
+                  <span className="flex items-baseline justify-between gap-3 flex-wrap">
+                    <span className={`font-bold text-sm sm:text-[15px] ${done ? 'text-stone-300 line-through' : 'text-stone-800 group-hover:text-[#a8554f]'} transition-colors`}>
+                      {step.title}
+                    </span>
+                    <span className="text-[11px] font-bold tracking-wide text-stone-400 shrink-0">{step.time}</span>
+                  </span>
+                  <span className={`block mt-1 text-sm font-medium leading-relaxed ${done ? 'text-stone-300' : 'text-stone-600'}`}>
+                    {step.desc}
+                  </span>
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+    </Card>
+  );
+}
+
+function TipsAndNutrition() {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <Card className="p-6 sm:p-8">
+        <h2 className="font-serif-kr text-lg font-bold text-stone-800 mb-5">요리 팁</h2>
+        <ul className="space-y-3">
+          {TIPS.map((tip, i) => (
+            <li key={i} className="flex gap-3 text-sm font-medium text-stone-600 leading-relaxed">
+              <span className="text-[#a8554f] font-bold shrink-0">—</span>
+              <span>{tip}</span>
+            </li>
+          ))}
+        </ul>
+      </Card>
+      <Card className="p-6 sm:p-8">
+        <h2 className="font-serif-kr text-lg font-bold text-stone-800 mb-5">영양 정보 (1인분)</h2>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-5">
+          {NUTRITION.map((n) => (
+            <div key={n.label} className="border-b-2 border-stone-100 pb-3">
+              <div className="text-[11px] font-bold tracking-wide uppercase text-stone-500">{n.label}</div>
+              <div className="font-serif-kr mt-1 text-2xl font-black text-stone-800">
+                {n.value}<span className="text-xs font-sans font-bold text-stone-400 ml-1">{n.unit}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-5 text-xs font-medium text-stone-400 leading-relaxed">
+          재료와 브랜드에 따라 실제 수치는 달라질 수 있는 예상치입니다.
+        </p>
+      </Card>
+    </div>
+  );
+}
+
+function RecipeMeta() {
+  return (
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-bold text-stone-600">
+      <span>총 15분</span>
+      <span className="text-stone-300">·</span>
+      <span>난이도 쉬움</span>
+      <span className="text-stone-300">·</span>
+      <span>노쿡 레시피</span>
+    </div>
+  );
+}
+
+function RecipePage() {
+  const [servings, setServings] = useState(BASE_SERVINGS);
+  const [checkedIngredients, setCheckedIngredients] = useState(new Set());
+  const [checkedSteps, setCheckedSteps] = useState(new Set());
+
+  const toggleIngredient = useCallback((id) => {
+    setCheckedIngredients((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }, []);
+
+  const toggleStep = useCallback((id) => {
+    setCheckedSteps((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }, []);
+
+  return (
+    <main className="max-w-2xl mx-auto px-6 pb-6 -mt-8 space-y-6">
+      <Card className="p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <RecipeMeta />
+          <div className="flex items-center gap-3">
+            <ServingsAdjuster servings={servings} onChange={setServings} />
+            <Button variant="secondary" size="sm" className="no-print" onClick={() => window.print()}>
+              인쇄
+            </Button>
+          </div>
+        </div>
+        <ProgressBar value={checkedSteps.size} max={STEPS.length} className="mt-6" />
+      </Card>
+
+      <div className="grid grid-cols-1 gap-6 items-start">
+        <IngredientsList servings={servings} checkedIds={checkedIngredients} onToggle={toggleIngredient} />
+        <StepsList checkedIds={checkedSteps} onToggle={toggleStep} />
+      </div>
+
+      <TipsAndNutrition />
+    </main>
+  );
+}
+
+// ========================================
+// 🚀 App Component
+// ========================================
+
+function App() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <RecipePage />
+      <Footer />
+    </div>
+  );
+}
+
+// ========================================
+// Rendering
+// ========================================
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
